@@ -1,0 +1,155 @@
+/* Universidade Federal do Rio de Janeiro
+ * Escola Politecnica
+ * Departamento de Eletronica e de Computacao
+ * EEL270 - Computacao II - Turma 2015/2
+ * Prof. Marcelo Luiz Drumond Lanza
+ * 
+ * Autor: Matheus Silva de Lima
+ * 
+ * $Author$
+ * $Date$
+ * $Log$
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "tozcFunctions.h"
+#include "tozcError.h"
+#include "tozcConfig.h"
+#include "tozcTypes.h"
+#include "tozcUserInterface.h"
+#include "tozcConst.h"
+
+#include "Libraries/mlcgi.h"
+
+
+int
+main (int argc, char **argv)
+{
+  environmentType environment;
+  char languageString[LANGUAGE_NAME_MAX_CARACTERS]; 
+  unsigned returnCode;
+  tozcLanguageType language;
+/*  tozcErrorType error; */
+
+
+
+  if (mlCgiInitialize (&environment))
+    exit (ML_CGI_OK);
+
+  if (environment == commandLine)
+  {
+    printf ("This program may only be executed via web\n");
+    exit (ML_CGI_INVALID_REQUEST_METHOD);
+  }
+
+  mlCgiBeginHttpHeader ("text/html");
+  mlCgiEndHttpHeader ();
+
+  returnCode = 
+	mlCgiGetFormStringNoNewLines ("tozcLanguage", languageString, LANGUAGE_NAME_MAX_CARACTERS);
+  if (returnCode != ML_CGI_OK)
+  {
+    printf ("Error getting name - Erro #%i\n", returnCode);
+    mlCgiFreeResources ();
+    exit (ML_CGI_OK);
+  }
+
+    
+  language = TozcGetLanguageIndex(languageString);
+
+/*************HTML-PAGE-CODE**************/
+
+printf ("<HTML>\n");
+printf ("  <HEAD>\n");
+	if (language == tozcPortuguese)
+	printf ("    <TITLE>Trezentos de Oitenta Caronas</TITLE>\n");
+	else
+	printf ("    <TITLE>Three hundred and eighty Rides </TITLE>\n");
+printf ("  </HEAD>\n");
+printf ("  <BODY BGCOLOR=\"white\">\n");
+printf ("    <DIV ALIGN=\"center\">\n");
+printf ("      <STRONG><FONT COLOR=\"blue\" SIZE=\"+2\">\n");
+        if (language == tozcPortuguese)
+	printf ("        Trezentos e Oitenta Caronas \n");
+	else
+	printf ("        Three hundred and eighty Rides \n");
+printf ("      </FONT></STRONG><br>\n");
+printf ("      <FONT SIZE=\"-1\">\n");
+printf ("        <A HREF=\"MAILTO: mathlima@poli.ufrj.br\">\n");
+printf ("          Matheus Silva de Lima\n");
+printf ("        </A>\n");
+printf ("      </FONT>\n");
+printf ("    </DIV>\n");
+printf ("    <br><br>\n");
+printf ("    <TABLE ALIGN=\"center\">\n");
+printf ("      <FORM ACTION=\"CGIs/tozcLogin.cgi\" METHOD=\"post\">\n");
+	if (language == tozcPortuguese)
+	printf ("         <INPUT TYPE=\"hidden\" NAME=\"tozcLanguage\" VALUE=\"portuguese\">\n");
+	else
+	printf ("         <INPUT TYPE=\"hidden\" NAME=\"tozcLanguage\" VALUE=\"english\">\n");
+printf ("         <TR>\n");
+	if (language == tozcPortuguese)
+	printf ("           <TD ALIGN=\"left\">Usu&aacute;rio:</TD>\n");
+	else
+	printf ("           <TD ALIGN=\"left\">User:</TD>\n");
+printf ("           <TD><INPUT TYPE=\"text\" NAME=\"tozcNickname\"></TD>\n");
+printf ("         </TR>\n");
+printf ("         <TR>\n");
+	if (language == tozcPortuguese)
+	printf ("           <TD ALIGN=\"left\">Senha:</TD>\n");
+	else
+	printf ("           <TD ALIGN=\"left\">Password:</TD>\n");
+printf ("           <TD><INPUT TYPE=\"password\" NAME=\"tozcPassword\"></TD>\n");
+printf ("         </TR>\n");
+printf ("         <TR>\n");
+	if (language == tozcPortuguese)
+	printf ("           <TD COLSPAN=\"2\" ALIGN=\"center\"><INPUT TYPE=\"submit\" VALUE=\"Entrar\"></TD>\n");
+	else
+	printf ("           <TD COLSPAN=\"2\" ALIGN=\"center\"><INPUT TYPE=\"submit\" VALUE=\"Login\"></TD>\n");
+printf ("         </TR>\n");
+printf ("         <TR>\n");
+printf ("           <TD COLSPAN=\"2\">&nbsp;</TD>\n");
+printf ("         </TR>\n");
+printf ("         <TR>\n");
+	if (language == tozcPortuguese)
+	{
+	printf ("           <TD ALIGN=\"left\"><A HREF=\"./tozcCgiShowRequestPasswordResetForm.cgi?tozcLanguage='portuguese'\">Esqueci minha senha</A></TD>\n");
+	printf ("           <TD ALIGN=\"right\"><A HREF=\"./tozcCgiShowRequestRegistrationForm.cgi?tozcLanguage='portuguese'\">Pedir Cadastro!</A></TD>\n");
+	}
+	else
+	{
+	printf ("           <TD ALIGN=\"left\"><A HREF=\"./tozcCgiShowRequestPasswordResetForm.cgi?tozcLanguage='english'\">Forgot my password</A></TD>\n");
+	printf ("           <TD ALIGN=\"right\"><A HREF=\"./tozcCgiShowRequestRegistrationForm.cgi?tozcLanguage='english'\">Ask to Sign In!</A></TD>\n");
+	}
+printf ("         </TR>\n");
+printf ("         <TR>\n");
+	if (language == tozcPortuguese)
+	{
+	printf ("           <TD ALIGN=\"left\"><A HREF=\"./tozcCgiShowLicence.cgi?tozcLanguage='portuguese'\">Licen&ccedil;a de Uso</A></TD>\n");
+	printf ("           <TD ALIGN=\"right\"><A HREF=\"./tozcCgiShowWebHelp.cgi?tozcLanguage='portuguese'\">Ajuda</A></TD>\n");
+	}
+	else
+	{
+	printf ("           <TD ALIGN=\"left\"><A HREF=\"./tozcCgiShowLicence.cgi?tozcLanguage='english'\">Licence</A></TD>\n");
+	printf ("           <TD ALIGN=\"right\"><A HREF=\"./tozcCgiShowWebHelp.cgi?tozcLanguage='english'\">Help</A></TD>\n");
+	}
+printf ("         </TR>\n");
+printf ("         <TR>\n");
+printf ("           <TD COLSPAN=\"2\">\n");
+	if (language == tozcPortuguese)
+	printf ("<A HREF=\"./tozcCgiMain.cgi?tozcLanguage='english'\">English</A></TD>\n");
+	else
+	printf ("<A HREF=\"./tozcCgiMain.cgi?tozcLanguage='portuguese'\">Portugues</A></TD>\n");
+printf ("         </TR>\n");
+printf ("      </FORM>\n");
+printf ("    </TABLE>\n");
+printf ("    <BR>\n");
+printf ("  </BODY>\n");
+printf ("</HTML>\n");
+  mlCgiFreeResources ();
+  return ML_CGI_OK;
+}
+
+/* $RCSfile$ */

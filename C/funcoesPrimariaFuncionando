@@ -1,0 +1,24 @@
+
+		Funcoes Primarias Funcionando
+
+
+			LockUser
+			UnlockUser
+			AddUser
+			Invite
+			AceptInvite
+			GetUser
+
+
+
+		Com algum problema
+
+			ChangeProfile
+			GetUnlockingRequests
+			ApproveRegistrationRequest
+
+			ChangeUserEmail 	(nao abrem o arquivo de abeyances(?))
+			ConfirmEmailChange
+
+			
+			RejectInvite(?)
